@@ -1,0 +1,29 @@
+Package: ics_metrics
+Version: 0.1
+Title: Intergrated Care System (ICS) Metrics Reference Library
+Description: A package for accessing, compiling, and presenting
+    the Integrated Care System Metrics created by the System
+    Insight and Analysis team within NHS England and NHS
+    Improvemnt's System Transformation team. This package
+    contains all code required to access and compile a set of
+    system metrics for any ICS and a starting point for
+    conducting analysis using these measures.
+Authors@R: c(
+    person("Ewan", "Wakeman", , "ewan.wakeman@nhs.net", "aut")
+    )
+Depends:
+    R (>= 3.3)
+Imports: 
+    tidyverse,
+    fingertipsR,
+    glue,
+    logger,
+    assert_that,
+    sf
+
+Suggests:
+License: MIT + file LICENSE
+URL: https://github.com/nhsengland/ics-metrics-ref
+BugReports: https://github.com/nhsengland/ics-metrics-ref/issues
+Collate: 
+Encoding: UTF-8
