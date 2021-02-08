@@ -1,0 +1,196 @@
+---
+params:
+  system: "E54000039"
+  analyst_mode: FALSE
+title: "System Metrics Reference Guide"
+author: "Ewan Wakeman"
+date: "02/12/2020"
+output: 
+  html_document:
+    css: "css/normal.css"
+    toc: true
+    toc_float: true
+
+---
+
+```{r setup, include=params$analyst_mode, warning=FALSE, message=FALSE, echo=FALSE}
+# Set Parameters
+knitr::opts_chunk$set(echo = params$analyst_mode, message=FALSE, warning = FALSE)
+
+# Set directory for markdown chunks of text and function to display them
+md_dir <- './chunks'
+md <- function(file){includeMarkdown(paste(md_dir, file, sep='/'))}
+
+# Load Packages
+req_pack <- c('htmltools', 'tidyverse', 'sf', 'knitr', 'glue', 'lubridate', 'patchwork', 'knitr')
+invisible(sapply(req_pack, require, character.only=T, quietly=T))
+
+# Load Associated themes / plotting functions
+list.files('theme', '\\.[Rr]', full.names = T) %>% map(source)
+list.files('code', '\\.[Rr]', full.names = T) %>% map(source)
+closeAllConnections()
+theme_set(thm$theme_light())
+
+# list ind codes
+inds <- get_indicators()
+# Load data
+smd <- read_csv('data/final_data_lad.csv')
+
+# Set up params
+all_sys <-
+  smd %>%
+  group_by(stp_code, stp_name) %>%
+  summarise()
+
+if (params$system %in% all_sys$stp_code){
+  sys <- with(all_sys[all_sys$stp_code == params$system,], 
+              list(code = stp_code, name = stp_name))
+} else if (params$system %in% all_sys$stp_name){
+  sys <- with(all_sys[all_sys$stp_name == params$system,], 
+              list(code = stp_code, name = stp_name))
+} else if (params$system == 'all'){
+  sys <- list(code = 'all', name = 'national')
+} else {
+  warning('System name or code not found in data!')
+  sys <- list(code = NA, name = NA)
+}
+
+smd_grp <-
+  smd %>%
+  ungroup() %>%
+  filter(ind_code %in% inds,
+         year(period_start) >= 2010,
+         val > 0) %>%
+  group_by(ind_code, ind_name,
+           period_start, period_end) %>%
+  summarise(
+    'count' = n(),
+    'mean' = mean(val, na.rm =T),
+    'sd' = sd(val, na.rm = T),
+    'se' = sd/sqrt(count),
+    .groups = 'drop'
+  ) 
+
+smd_nest <-
+  smd_grp %>%
+  group_by(ind_code, ind_name) %>%
+  nest() %>%
+  ungroup()
+```
+
+# Introduction
+```{r intro}
+md('intro.md')
+sys_metrics_tab <- read_csv('data/system_metrics.csv')
+kable(sys_metrics_tab)
+```
+# Metrics
+
+## Are systems delivering better, more equal  outcomes to the people who live there?
+
+```{r outcome-metrics-md}
+md('outcome_metrics.md')
+```
+#### Visualation over time
+
+```{r outcomes-plots, fig.height=10, fig.width=8}
+outcomes <- c('hle_0', 'cvmcp')
+plots <-
+  smd_nest %>%
+  filter(ind_code %in% outcomes) %>%
+  unname() %>%
+  pmap(time_series_plot)
+
+(plots[[1]] / plots[[2]])
+```
+
+
+```{r working-together-md}
+md('working_together.md')
+```
+
+#### Visualisation over time
+
+```{r working-together-vis}
+work_tog <- c('av_adm')
+plots <-
+  smd_nest %>%
+  filter(ind_code %in% work_tog) %>%
+  unname() %>%
+  pmap(time_series_plot)
+
+plots[[1]]
+```
+
+```{r prevention-md}
+md('prevention.md')
+```
+
+#### Visualisation over time
+
+```{r prevention-vis}
+prev <- c('phys_act', 'obs_y6')
+plots <-
+  smd_nest %>%
+  filter(ind_code %in% prev) %>%
+  unname() %>%
+  pmap(time_series_plot)
+
+plots[[1]]
+```
+
+
+```{r staff-support-md}
+md('staff_support.md')
+```
+
+#### Visualisation over time
+
+```{r staff-viz, fig.width=12}
+staff <- c("pc_gp_ratio", "pc_nurse_ratio",  "sc_nurse_ratio", "sc_doc_ratio", "asc_directcare_ratio")
+filtered <-
+  smd %>%
+  filter(ind_code %in% staff)
+pc_sc_plot(filtered)
+```
+
+```{r finances}
+md('finances.md')
+```
+
+# Principles
+
+```{r principles}
+md('open_source.md')
+md('principles.md')
+```
+
+# Important Concepts
+
+## Time Series and Trends
+
+```{r time-series}
+md('time_series.md')
+```
+
+## Geographical Variation
+
+```{r geo-variation}
+md('geo_variation.md')
+```
+
+## Relationships between metrics
+
+```{r relationships}
+md('metric_relationships.md')
+```
+
+## Demographic data
+```{r demography}
+md('demography.md')
+```
+
+# Visualisation of Data
+
+# Links to other work
+
