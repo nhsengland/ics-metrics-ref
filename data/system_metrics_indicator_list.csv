@@ -1,0 +1,43 @@
+ind_code,ind_name,first_entry,latest_entry
+asc_directcare_ratio,"Number of adult social care employees in direct care roles per 100,000 people",2013-01-01,2019-01-01
+asc_manager_ratio,"Number of adult social care employees in manager supervisor roles per 100,000 people",2013-01-01,2019-01-01
+asc_occther_ratio,"Number of adult social care employees in occupational therapist roles per 100,000 people",2017-01-01,2019-01-01
+asc_other_ratio,"Number of adult social care employees in all employees roles per 100,000 people",2013-01-01,2019-01-01
+asc_other_ratio,"Number of adult social care employees in other roles per 100,000 people",2013-01-01,2019-01-01
+asc_regprof_ratio,"Number of adult social care employees in regulated professional roles per 100,000 people",2013-01-01,2019-01-01
+asc_socialworker_ratio,"Number of adult social care employees in social worker roles per 100,000 people",2017-01-01,2019-01-01
+av_adm,"Emergency admissions for acute conditions that should not usually require hospital admission (rate per 100,000)",2013-04-01,2019-04-01
+cpa_emp,CPA adults in employment: % of people on CPA (aged 18-69) (end of quarter snapshot),2013-04-01,2019-04-01
+cvmcp,Under 75 mortality rate from cardiovascular diseases considered preventable,2001-01-01,2016-01-01
+death_upr,Percentage of deaths in usual place of residence,2018-04-01,2018-07-01
+ef_rbm,Percentage of people  aged 65 and over who were still at home 91 days after discharge from hospital,2010-04-01,2018-04-01
+gp_cls_ae,What happened when contacted NHS services when wanted to see GP but GP practice was closed - I went to A&E,2016-01-01,2019-01-01
+gp_exp_gd,Overall experience of making an appointment - Summary result - Good (Combined 'very good' and 'fairly good' responses  to be used with base for summary result),2015-01-01,2019-01-01
+gp_wk_appt,How long until the appointment took place - A week or more later,2015-01-01,2019-01-01
+hle_0,Healthy life expectancy at birth,2009-01-01,2016-01-01
+hle_65,Healthy life expectancy at 65,2009-01-01,2016-01-01
+obs_y6,Year 6: Prevalence of obesity (including severe obesity),2006-04-01,2018-04-01
+pc_admin_ratio,"Number of Primary Care Admin staff per 100,000 patients (registered)",2016-03-01,2020-03-01
+pc_dpc_ratio,"Number of Primary Care Direct Patient Contact roles per 100,000 patients (registered)",2016-03-01,2020-03-01
+pc_gp_ratio,"Number of GPs per 100,000 patients (registered)",2016-03-01,2020-03-01
+pc_nurse_ratio,"Number of Primary Care Nurses per 100,000 patients (registered)",2016-03-01,2020-03-01
+pc_total_pat,Number of Primary Care Registered Patients,2016-03-01,2020-03-01
+phys_act,Percentage of physically active adults,2015-04-01,2018-04-01
+rc_rbm,Percentage of people aged 65 and over offered reablement services following discharge from hospital.,2010-04-01,2018-04-01
+sc_adm_ratio,"Number of secondary care Admin per 100,000 people",2009-09-30,2020-04-30
+sc_amb_ratio,"Number of secondary care Ambulance Staff per 100,000 people",2009-09-30,2020-04-30
+sc_clin_ratio,"Number of secondary care Clinical Other per 100,000 people",2009-09-30,2020-04-30
+sc_doc_ratio,"Number of secondary care Doctors per 100,000 people",2009-09-30,2020-04-30
+sc_mwv_ratio,"Number of secondary care Midwives per 100,000 people",2009-09-30,2020-04-30
+sc_nurse_ratio,"Number of secondary care Nurses per 100,000 people",2009-09-30,2020-04-30
+sc_other_ratio,"Number of secondary care N/A per 100,000 people",2009-09-30,2020-04-30
+scs_growth_acute,Acute Staff Growth ((Total Starters - Total Leavers) / Total Workforce at start of period),2017-04-30,2018-09-30
+scs_growth_comm,Community Provider Trust Staff Growth ((Total Starters - Total Leavers) / Total Workforce at start of period),2017-04-30,2018-09-30
+scs_growth_mh,Mental Health Staff Growth ((Total Starters - Total Leavers) / Total Workforce at start of period),2017-04-30,2018-09-30
+scs_ratio_acute,"Acute Staff per 100,000 people (System Population (2018))",2017-04-30,2018-09-30
+scs_ratio_comm,"Community Provider Trust Staff per 100,000 people (System Population (2018))",2017-04-30,2018-09-30
+scs_ratio_mh,"Mental Health Staff per 100,000 people (System Population (2018))",2017-04-30,2018-09-30
+scs_turnover_acute,Acute Staff Turnover (Total Leavers / Total Workforce at start of period),2017-04-30,2018-09-30
+scs_turnover_comm,Community Provider Trust Staff Turnover (Total Leavers / Total Workforce at start of period),2017-04-30,2018-09-30
+scs_turnover_mh,Mental Health Staff Turnover (Total Leavers / Total Workforce at start of period),2017-04-30,2018-09-30
+smk_ad,Smoking Prevalence in adults (18+) - current smokers (APS),2011-01-01,2019-01-01

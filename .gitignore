@@ -19,6 +19,8 @@
 
 # RStudio files
 .Rproj.user/
+*.Rproj
+.Rbuildignore
 
 # produced vignettes
 vignettes/*.html
@@ -39,4 +41,4 @@ vignettes/*.pdf
 .Renviron
 
 # Compiled data files
-data/*
+data/sys_metrics*.csv
