@@ -13,3 +13,5 @@ fingertips_lad_codes <-
     filter(str_detect(AreaTypeName, 'Lower tier local')) %>% 
     group_by(AreaTypeID, AreaTypeName) %>% 
     summarise()
+
+registry_dir <- './raw_data'
