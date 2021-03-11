@@ -1,24 +1,24 @@
 ---
 params:
-  system: "E54000039"
+  system: "all"
   analyst_mode: FALSE
 title: "System Metrics Reference Guide"
 author: "Ewan Wakeman"
 date: "02/12/2020"
 output: 
-  html_document:
-    css: "css/normal.css"
-    toc: true
-    toc_float: true
-
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r setup, include=params$analyst_mode, warning=FALSE, message=FALSE, echo=FALSE}
+
+
 # Set Parameters
-knitr::opts_chunk$set(echo = params$analyst_mode, message=FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = params$analyst_mode, message=FALSE, warning = FALSE, root.dir = normalizePath(".."))
+root <- knitr::opts_chunk$get('root.dir')
 
 # Set directory for markdown chunks of text and function to display them
-md_dir <- './chunks'
+md_dir <- file.path(root, 'markdown')
 md <- function(file){includeMarkdown(paste(md_dir, file, sep='/'))}
 
 # Load Packages
@@ -26,15 +26,15 @@ req_pack <- c('htmltools', 'tidyverse', 'sf', 'knitr', 'glue', 'lubridate', 'pat
 invisible(sapply(req_pack, require, character.only=T, quietly=T))
 
 # Load Associated themes / plotting functions
-list.files('theme', '\\.[Rr]', full.names = T) %>% map(source)
-list.files('code', '\\.[Rr]', full.names = T) %>% map(source)
-closeAllConnections()
+list.files(file.path(root, 'theme'), '\\.[Rr]', full.names = T) %>% map(source)
+source(file.path(root,'/R/metadata.r'))
+source(file.path(root, '/R/plotting.r'))
 theme_set(thm$theme_light())
 
 # list ind codes
-inds <- get_indicators()
+inds <- get_indicators(path = file.path(root, '/data/system_metrics_indicator_list.csv'))
 # Load data
-smd <- read_csv('data/final_data_lad.csv')
+smd <- read_csv(file.path(root, 'data/sys_metrics.csv'))
 
 # Set up params
 all_sys <-
@@ -81,7 +81,7 @@ smd_nest <-
 # Introduction
 ```{r intro}
 md('intro.md')
-sys_metrics_tab <- read_csv('data/system_metrics.csv')
+sys_metrics_tab <- read_csv(file.path(root, 'data/system_metrics_tab.csv'))
 kable(sys_metrics_tab)
 ```
 # Metrics

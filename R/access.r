@@ -9,7 +9,7 @@ library(tidyverse)
 library(rvest)
 library(fingertipsR)
 
-source('./R/constants.r')
+source(file.path('R/constants.r'),  local=F)
 
 # get_links
 # retrieves data from links
@@ -69,10 +69,6 @@ get_viewpoint_data <- function(ids){
 }
 
 get_gp_survey_data <- function(ids){
-
-}
-
-get_links <- function(url, pattern='*'){
 
 }
 
