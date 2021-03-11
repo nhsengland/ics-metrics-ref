@@ -42,3 +42,6 @@ vignettes/*.pdf
 
 # Compiled data files
 data/sys_metrics*.csv
+
+# raw data
+raw_data
