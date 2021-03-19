@@ -30,6 +30,10 @@ trace(grDevices::png, exit = quote({
 # ---- custom fonts ----
 
 font_paths('~/R/base/theme/fonts') # add fonts folder to font paths
+proj_fonts <- normalizePath('theme/fonts')
+if(file.exists(proj_fonts)){
+  font_paths(proj_fonts)
+}
 
 # find all fonts stored in theme folder calculate font weights and infer a "bold"
 custom_fonts <-
@@ -54,6 +58,7 @@ custom_fonts <-
          bold_weight = round(weight + 300, digits = -2)
          ) %>%
   select(main_family, family, face, file, weight, bold_weight) %>%
+  unique() %>%
   pivot_wider(id_cols = c(main_family, family, weight, bold_weight), names_from = face, values_from = file) %>%
   left_join(y = transmute(., main_family, weight, Bold = Regular, BoldItalic = Italic), by = c('bold_weight' = 'weight', 'main_family' = 'main_family'))
 
@@ -100,20 +105,36 @@ colours <- list(dark = '#222629',
 # ---- nhse_colours ----
 nhse_colours <- 
   list(
-    `blue` = '#005EB8',
-    `dark_blue` = '#003087',
-    `bright_blue` = '#0072CE',
-    `light_blue` = '#41B6E6',
-    `aqua_blue` = '#00A9CE',
-    `black` = '#231F20',
-    `dark_grey` = '#425563',
-    `mid_grey` = '#768692',
-    `pale_grey` = '#E8EDEE',
-    `dark_pink` = '#7C2855',
-    `pink` = '#AE2573',
-    `green` = '#009639',
-    `light_green` = '#78BE20'
+    # blues
+    blue        = '#005EB8',
+    dark_blue   = '#003087',
+    bright_blue = '#0072CE',
+    light_blue  = '#41B6E6',
+    aqua_blue   = '#00A9CE',
+
+    # neutrals
+    black       = '#231F20',
+    dark_grey   = '#425563',
+    mid_grey    = '#768692',
+    pale_grey   = '#E8EDEE',
+
+    #support greens
+    dark_green  = '#006747',
+    green       = '#009639',
+    light_green = '#78BE20',
+    aqua_green  = '#00A499',
+
+    # highlights
+    purple      = '#330072',
+    dark_pink   = '#7C2855',
+    pink        = '#AE2573',
+    dark_red    = '#8A1538',
+    red         = '#DA291C',
+    orange      = '#ED8B00',
+    warm_yellow = '#FFB81C',
+    yellow      = '#FAE100'
   )
+  
 
 # --- ordinal colours (neg/neut/pos) ----
 ord_colours <-
@@ -130,16 +151,38 @@ theme_light <-
     thm <- 
       theme_minimal(base_family = base_family, base_size = base_size) %+%
       theme(
-        plot.background = element_rect(fill = thm$nhse_colours$pale_grey, colour = 'transparent'),
+        plot.background = element_rect(fill = nhse_colours$pale_grey, colour = 'transparent'),
         plot.title = element_text(size = rel(1.2), margin = margin(20,2,20,2)),
         plot.subtitle = element_text(size = rel(1)),
-        text = element_text(colour = thm$colours$dark, size = base_size),
+        text = element_text(colour = colours$dark, size = base_size),
         strip.text = element_text(size = rel(1)),
         axis.text = element_text(size = rel(.9)),
         axis.title = element_text(size = rel(.9))
       )
     if(panel.grid){
-      thm <- thm %+% theme(panel.grid = element_line(colour = paste0(thm$colours$dark, 30)))
+      thm <- thm %+% theme(panel.grid = element_line(colour = paste0(colours$dark, 30)))
+    } else {
+      thm <- thm %+% theme(panel.grid = element_blank())
+    }
+    return(thm)
+  }
+
+theme_nhs_light <-
+  function(base_family = 'Inter Light', base_size = 12, panel.grid = F){
+    thm <- 
+      theme_minimal(base_family = base_family, base_size = base_size) %+%
+      theme(
+        plot.background = element_rect(fill = nhse_colours$pale_grey, colour = 'transparent'),
+        plot.title = element_text(colour=nhse_colours$dark_blue, size = rel(1.2), margin=margin(5,2,5,2)),
+        plot.title.position = 'plot',
+        plot.subtitle = element_text(colour=nhse_colours$blue, size = rel(1), margin=),
+        text = element_text(colour = colours$dark, size = base_size),
+        strip.text = element_text(size = rel(1)),
+        axis.text = element_text(size = rel(.9)),
+        axis.title = element_text(size = rel(.9))
+      )
+    if(panel.grid){
+      thm <- thm %+% theme(panel.grid = element_line(colour = paste0(colours$dark, 30)))
     } else {
       thm <- thm %+% theme(panel.grid = element_blank())
     }
@@ -155,13 +198,13 @@ theme_tpt <-
         panel.background = element_rect(fill = 'transparent', colour = 'transparent'),
         plot.title = element_text(size = rel(1.2), margin = margin(20,2,20,2)),
         plot.subtitle = element_text(size = rel(1)),
-        text = element_text(colour = thm$colours$dark, size = base_size),
+        text = element_text(colour = colours$dark, size = base_size),
         strip.text = element_text(size = rel(1)),
         axis.text = element_text(size = rel(.9)),
         axis.title = element_text(size = rel(.9))
       )
     if(panel.grid){
-      thm <- thm %+% theme(panel.grid = element_line(colour = paste0(thm$colours$dark, 30)))
+      thm <- thm %+% theme(panel.grid = element_line(colour = paste0(colours$dark, 30)))
     } else {
       thm <- thm %+% theme(panel.grid = element_blank())
     }
@@ -173,51 +216,63 @@ theme_dark <-
     thm <-
       theme_minimal(base_family = base_family, base_size = base_size) %+%
       theme(
-        plot.background = element_rect(fill =thm$colours$dark, colour = 'transparent'),
+        plot.background = element_rect(fill =colours$dark, colour = 'transparent'),
         panel.grid.minor = element_blank(),
-        text = element_text(family = base_family, colour = thm$colours$light, size = base_size),
+        text = element_text(family = base_family, colour = colours$light, size = base_size),
         plot.title = element_text(family = base_family, size = rel(1.3), margin = margin(20,2,20,2)),
         plot.subtitle = element_text(size = rel(1)),
         axis.title = element_text(size = rel(.9)),
-        axis.text = element_text(colour = thm$colours$light, size = rel(.9)),
-        strip.text = element_text(colour = thm$colours$light, size = rel(1)),
-        line = element_line(colour = thm$colours$light)
+        axis.text = element_text(colour = colours$light, size = rel(.9)),
+        strip.text = element_text(colour = colours$light, size = rel(1)),
+        line = element_line(colour = colours$light)
       )
     if(panel.grid){
-      thm <- thm %+% theme(panel.grid = element_line(colour = paste0(thm$colours$light, 15)))
+      thm <- thm %+% theme(panel.grid = element_line(colour = paste0(colours$light, 15)))
     } else {
       thm <- thm %+% theme(panel.grid = element_blank())
     }
     return(thm)
   }
 
-set_theme_defaults <- function(){
+set_theme_defaults <- function(colourful = F){
   hl <- theme_get()$text$colour
   bg <- theme_get()$plot.background$fill
+  chl <- theme_get()$plot.title$colour
   
   params <- ls(pattern = '^geom_', env = as.environment('package:ggplot2'))
   geoms <- gsub("geom_", "", params)
   
   attempt_update <- function(x, ...){tryCatch(update_geom_defaults(x, ...), 
                                          error = function(err){print(paste('unable to update', x))})}
-  lapply(geoms, attempt_update, list(colour = hl))
-  
+  if(colourful){
+    lapply(geoms, attempt_update, list(colour = chl))
+  } else {
+    lapply(geoms, attempt_update, list(colour = hl))
+  }  
   return(list('hl' = hl, 'bg' = bg))
 }
 
+fix_margins <- function(x){
+  if(!is.null(x$labels$subtitle)){
+    x <- x + theme(plot.title = element_text(margin=margin(5,5,5,5,'pt')))
+  }
+  return(x)
+}
+
+
 
 default_colours <- set_theme_defaults()
-thm <- list('colours' = colours,
-                 'nhse_colours' = nhse_colours,
-                 'default_colours' = default_colours,
-                 'ord_colours' = ord_colours,
-                 'set_theme_defaults' = set_theme_defaults,
-                 'theme_dark' = theme_dark,
-                 'theme_light' = theme_light,
-                 'theme_tpt' = theme_tpt)
+# thm <- list('colours' = colours,
+#                  'nhse_colours' = nhse_colours,
+#                  'default_colours' = default_colours,
+#                  'ord_colours' = ord_colours,
+#                  'set_theme_defaults' = set_theme_defaults,
+#                  'theme_dark' = theme_dark,
+#                  'theme_light' = theme_light,
+#                  'theme_tpt' = theme_tpt)
 
 theme_set(theme_dark())
 
-rm(list = c(names(thm), 'custom_fonts'))
+rm('custom_fonts')
 
    

@@ -3,7 +3,7 @@
 #' Date: 11/12/2021
 #' Based on: https://drsimonj.svbtle.com/creating-corporate-colour-palettes-for-ggplot2
 
-require(assert_that)
+require(assertthat)
 require(ggplot2)
 
 # NHS England Colours
@@ -133,3 +133,4 @@ shade <- function(hex, mod=0){
   out_colour <- paste0('#', hex, groups[4])
   return(out_colour)
 }
+
