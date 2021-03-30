@@ -159,6 +159,53 @@ get_gp_survey_data <- function(ids){
 
 }
 
+
 get_nhsd_data <- function(ids){
 
+}
+
+
+get_gp_workforce_data <-
+  function(url = "https://digital.nhs.uk/data-and-information/publications/statistical/general-and-personal-medical-services",
+           dl.dir = './raw_data/gp_workforce') {
+    # get links to monthly general practice workforce data, filtering links on text containing 'General Practice Workforce'
+    baselinks <-
+      get_links(url, name_pat = "General Practice Workforce.{1,5}[0-9]{1}")
+    
+    # within each identified monthly data link, identify link to download practice level csv, filter on text containing 'Practice level csv', bind rows of output
+    # these are zip files, not csvs
+    datalinks <-
+      map_dfr(baselinks$full_url, get_links, name_pat = "Practice Level CSV")
+    
+    # download csv for each identified monthly dataset and save in raw_data folder
+    if (!dir.exists(dl.dir)) {
+      dir.create(dl.dir)
+    }
+    
+    local_file <- map_chr(datalinks$full_url, function(x) {
+      file <- tempfile(tmpdir = dl.dir, fileext = '.zip')
+      download.file(x, file, method = 'libcurl')
+      # not sure if we want to register at this point or later - make a record of when we got the data, the source, and where it is saved locally
+      # return where the file is now
+      return(file)
+    })
+    map(local_file, unzip, exdir = './raw_data/gp_workforce')
+    csvs <-
+      list.files('./raw_data/gp_workforce',
+                 pattern = "Practice [Ll]evel.csv",
+                 full.names = T)
+    combineddf <- map_dfr(csvs, function(path) {
+      data <- read_csv(path, col_types = cols(.default = "c"))
+      csvcolnames <- colnames(data)
+      selcols <- c(csvcolnames[csvcolnames %in% c("PRAC_CODE", "PRAC_NAME", "CCG_CODE", "CCG_NAME")],
+                   csvcolnames[str_detect(csvcolnames, "TOTAL_[:alpha:]*_FTE")],
+                   csvcolnames[str_detect(csvcolnames, "TOTAL.*PATIENTS")])
+      data <- select(data, selcols) %>%
+        mutate(source = str_extract(path, "[:alpha:]*\\s[:digit:]{2,4}"))
+      return(data)
+    })
+    rawdatapath <- "./raw_data/gp_workforce/workforceraw.csv"
+    write_csv(combineddf, file = rawdatapath)
+    outpath <- reg_dl(rawdatapath, "gpworkforce", "gp_workforce.csv")
+    return(outpath)
 }
